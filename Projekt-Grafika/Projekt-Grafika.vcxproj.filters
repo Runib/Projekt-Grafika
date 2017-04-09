@@ -14,4 +14,83 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Walec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Prostopadloscian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ostroslup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prostoTrojkat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kula.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stozek.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="smiglo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pierscien.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="trapez.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kamerka.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Nogi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tlow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Walec.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Prostopadloscian.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ostroslup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="prostoTrojkat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kula.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stozek.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="smiglo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pierscien.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trapez.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kamerka.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Nogi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tlow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
