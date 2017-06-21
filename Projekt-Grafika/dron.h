@@ -7,7 +7,7 @@ class dron
 public:
 	dron();
 	~dron();
-	float obrotL, obrotP, ster, nachyl, goradol;
+	float naboki, nachyl, wysokosc;		//nachylenie drona przod/tyl, wysokosc i zmienna obliczania do kata nachylenia drona
 	void dron_rysuje();
 
 

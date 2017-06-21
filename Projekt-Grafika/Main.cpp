@@ -40,7 +40,7 @@ void TimerFunction(int value) {
 
 
 	systembat.speed = systembat.speed*0.98;
-	dronek.ster = dronek.ster*0.9;
+	dronek.naboki = dronek.naboki*0.9;
 	glutPostRedisplay();
 	glutTimerFunc(33, TimerFunction, 1);
 }
@@ -107,12 +107,12 @@ void display()
 	glRotatef(-systembat.katY, 1.0, 0, 0);
 	glRotatef(-systembat.katZ, 0, 1, 0);
 	glTranslatef(-systembat.x+0.5, -systembat.y, -systembat.z+0.2);//camera pozycja
-	glTranslatef(0, dronek.goradol, 0);
+	glTranslatef(0, dronek.wysokosc, 0);
 	Budynek();
-	systembat.latanie(dronek.ster, dronek.nachyl, dronek.goradol, collision);
+	systembat.latanie(dronek.naboki, dronek.nachyl, dronek.wysokosc, collision);
 	glPushMatrix();
 	glScalef(0.02, 0.02, 0.02);
-	glTranslatef(0, -dronek.goradol * 5, 0);
+	glTranslatef(0, -dronek.wysokosc * 5, 0);
 	glRotatef(-180, 0, 1, 0);
 	glTranslatef(1, 1, 1);
 	dronek.dron_rysuje();
@@ -160,13 +160,13 @@ void keyboard(int key, int x,int y)
 		break;
 
 	case GLUT_KEY_F1:
-		if (dronek.goradol < 1)
-			dronek.goradol += 0.05;
+		if (dronek.wysokosc < 1)
+			dronek.wysokosc += 0.05;
 		break;
 
 	case GLUT_KEY_F2:
-		if (dronek.goradol >= -3.8)
-			dronek.goradol -= 0.05;
+		if (dronek.wysokosc >= -3.8)
+			dronek.wysokosc -= 0.05;
 		break;
 
 	case GLUT_KEY_UP:
@@ -189,16 +189,16 @@ void keyboard(int key, int x,int y)
 		break;
 
 	case GLUT_KEY_LEFT:
-		dronek.ster += 0.2;
-		systembat.katZ += dronek.ster;//kamera
-		systembat.katX -= dronek.ster;//dron
+		dronek.naboki += 0.2;
+		systembat.katZ += dronek.naboki;//kamera
+		systembat.katX -= dronek.naboki;//dron
 		break;
 
 	case GLUT_KEY_RIGHT:
 
-		dronek.ster -= 0.2;
-		systembat.katZ += dronek.ster;//kamera
-		systembat.katX -= dronek.ster;//dron
+		dronek.naboki -= 0.2;
+		systembat.katZ += dronek.naboki;//kamera
+		systembat.katX -= dronek.naboki;//dron
 
 	default:
 		break;
@@ -220,9 +220,9 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);  // Display Mode
 	glutInitWindowSize(win.width, win.height);					// set window size
 	glutCreateWindow(win.title);								// create Window
-	glutDisplayFunc(display);									// register Display Function
-	glutIdleFunc(display);									// register Idle Function
-	//glutKeyboardFunc(keyboard);								// register Keyboard Handler
+	glutDisplayFunc(display);									// reginaboki Display Function
+	glutIdleFunc(display);									// reginaboki Idle Function
+	//glutKeyboardFunc(keyboard);								// reginaboki Keyboard Handler
 	glutSpecialFunc(keyboard);
 	initialize();
 	glutTimerFunc(33, TimerFunction, 1);

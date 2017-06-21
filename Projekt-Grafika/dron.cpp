@@ -4,8 +4,8 @@
 
 dron::dron()
 {
-	obrotL = obrotP = ster = nachyl = 0;
-	goradol = 0;
+	naboki = nachyl = 0;
+	wysokosc = 0;
 }
 
 
