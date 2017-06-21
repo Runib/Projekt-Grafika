@@ -87,7 +87,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -118,7 +118,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -148,6 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dron.cpp" />
+    <ClCompile Include="glm.cpp" />
+    <ClCompile Include="glmimg.cpp" />
     <ClCompile Include="kamerka.cpp" />
     <ClCompile Include="kula.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -158,11 +161,16 @@
     <ClCompile Include="prostoTrojkat.cpp" />
     <ClCompile Include="smiglo.cpp" />
     <ClCompile Include="stozek.cpp" />
+    <ClCompile Include="systemDron.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Tlow.cpp" />
     <ClCompile Include="trapez.cpp" />
     <ClCompile Include="Walec.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dron.h" />
+    <ClInclude Include="glm.h" />
+    <ClInclude Include="glut.h" />
     <ClInclude Include="kamerka.h" />
     <ClInclude Include="kula.h" />
     <ClInclude Include="Nogi.h" />
@@ -172,6 +180,8 @@
     <ClInclude Include="prostoTrojkat.h" />
     <ClInclude Include="smiglo.h" />
     <ClInclude Include="stozek.h" />
+    <ClInclude Include="systemDron.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Tlow.h" />
     <ClInclude Include="trapez.h" />
     <ClInclude Include="Walec.h" />

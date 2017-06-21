@@ -11,7 +11,7 @@ Tlow::~Tlow()
 {
 }
 
-void Tlow::Tlow_rysuje(void)
+void Tlow::Tlow_rysuje()
 {
 	glPushMatrix();
 	glTranslated(40.0, 0.0, 10.0);

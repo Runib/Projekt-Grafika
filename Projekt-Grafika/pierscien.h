@@ -7,7 +7,7 @@
 class pierscien
 {
 private:
-	double x, y, alpha, PI = 3.14;
+	float x, y, alpha, pi = 3.14;
 public:
 	pierscien();
 	~pierscien();

@@ -17,6 +17,6 @@ private:
 public:
 	Tlow();
 	~Tlow();
-	void Tlow_rysuje(void);
+	void Tlow_rysuje();
 };
 

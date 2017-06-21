@@ -8,7 +8,7 @@
 class Walec
 {
 private:
-	double x, y, alpha, PI = 3.14;
+	double x, y, alpha, pi = 3.14;
 public:
 	Walec();
 	~Walec();

@@ -18,7 +18,7 @@ void pierscien::pierscien_rysuje(double r, double h, double w)
 		
 		glColor3d(0.0, 0.0, 0.0);
 		glBegin(GL_TRIANGLE_STRIP);
-		for (alpha = 0; alpha <= 2 * PI; alpha += PI / 15.0)
+		for (alpha = 0; alpha <= 2 * pi; alpha += pi / 15.0)
 		{
 			x = r* sin(alpha);
 			y = r* cos(alpha);
@@ -30,7 +30,7 @@ void pierscien::pierscien_rysuje(double r, double h, double w)
 		glEnd();
 
 		glBegin(GL_TRIANGLE_STRIP);
-		for (alpha = 0; alpha <= 2 * PI; alpha += PI / 15.0)
+		for (alpha = 0; alpha <= 2 * pi; alpha += pi / 15.0)
 		{
 			x = r* sin(alpha);
 			y = r* cos(alpha);
@@ -42,7 +42,7 @@ void pierscien::pierscien_rysuje(double r, double h, double w)
 		glEnd();
 
 		glBegin(GL_TRIANGLE_STRIP);
-		for (alpha = 0; alpha <= 2 * PI; alpha += PI / 15.0)
+		for (alpha = 0; alpha <= 2 * pi; alpha += pi / 15.0)
 		{
 			x = r* sin(alpha);
 			y = r* cos(alpha);
@@ -52,7 +52,7 @@ void pierscien::pierscien_rysuje(double r, double h, double w)
 		glEnd();
 
 		glBegin(GL_TRIANGLE_STRIP);
-		for (alpha = 0; alpha <= 2 * PI; alpha += PI / 15.0)
+		for (alpha = 0; alpha <= 2 * pi; alpha += pi / 15.0)
 		{
 			x = r* sin(alpha);
 			y = r* cos(alpha);

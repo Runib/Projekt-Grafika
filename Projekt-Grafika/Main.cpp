@@ -3,14 +3,22 @@
 #include <GL/gl.h>		   // Open Graphics Library (OpenGL) header
 #include <GL/glut.h>	   // The GL Utility Toolkit (GLUT) Header
 #include <math.h>
-#include "Nogi.h"
-#include "Tlow.h"
-
+#include "systemDron.h"
+#include "dron.h"
+#include "glm.h"
 
 #define KEY_ESCAPE 27
 #define GL_PI 3.14
 
-double KamerX=40, KamerY=50, KamerZ=-100, kat = 0;
+GLfloat xRot = 0.0f;
+GLfloat yRot = 0.0f;
+GLdouble xCam, yCam, zCam, angle = 0;
+GLfloat rotatex = 90;
+GLfloat rotatey = 90;
+GLfloat rotate = 0;
+GLfloat translatex = 0;
+GLfloat translatey = 0;
+dron dronek;
 
 typedef struct {
 	int width;
@@ -22,85 +30,176 @@ typedef struct {
 	float z_far;
 } glutWindow;
 
+float g_rotation;
 glutWindow win;
+SYSTEMB systembat;
+GLMmodel *bud;
 
+void TimerFunction(int value) {
+	dronek.nachyl = dronek.nachyl*0.9;
+
+
+	systembat.speed = systembat.speed*0.98;
+	dronek.ster = dronek.ster*0.9;
+	glutPostRedisplay();
+	glutTimerFunc(33, TimerFunction, 1);
+}
+
+void Budynek() {
+	if (!bud) {
+		bud = glmReadOBJ("nowy.obj");
+		if (!bud) exit(0);
+		glmFacetNormals(bud);
+		glmVertexNormals(bud, 90.0);
+	}
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.003");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.002");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.001");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.012_Cylinder.014");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.013");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.012");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.011");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.010");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.009");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.008");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.011_Cylinder.013");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.010_Cylinder.012");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.009_Cylinder.011");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.008_Cylinder.010");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.007");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.006");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.005");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.004");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.003");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.002");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.001");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.007");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.006");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.005");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.004");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Plane.001_Plane.002");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.003");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.002");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.001");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube");
+	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Plane");
+	
+	glPushMatrix();
+	glPopMatrix();
+
+}
+
+bool collision = false;
 void display()
 {
+
+	glEnable(GL_DEPTH_TEST);
+	glShadeModel(GL_SMOOTH);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	gluLookAt(KamerX, KamerY, KamerZ, KamerX + 100 * sin(kat), KamerY - 4, KamerZ + 100 * cos(kat), 0.0, 1.0, 0.0);
-	// Save the matrix state and do the rotations
-	Tlow tlow;
-	Nogi nogi;
-	
-
-	glPushMatrix();
-	
-
-	/////////////////////////////////////////////////////////////////
-	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
-	//Sposób na odróŸnienie "przedniej" i "tylniej" œciany wielok¹ta:
-	glPolygonMode(GL_BACK, GL_LINE);
-	nogi.Nogi_rysuje();
-	tlow.Tlow_rysuje();
-	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	// Flush drawing commands
+	glEnable(GL_POLYGON_SMOOTH);
+	glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
+	glEnable(GL_COLOR_MATERIAL);
+	glTranslatef(translatex, translatey, -15);
+	glRotatef(-systembat.katY, 1.0, 0, 0);
+	glRotatef(-systembat.katZ, 0, 1, 0);
+	glTranslatef(-systembat.x+0.5, -systembat.y, -systembat.z+0.2);//camera pozycja
+	glTranslatef(0, dronek.goradol, 0);
+	Budynek();
+	systembat.latanie(dronek.ster, dronek.nachyl, dronek.goradol, collision);
+	glPushMatrix();
+	glScalef(0.02, 0.02, 0.02);
+	glTranslatef(0, -dronek.goradol * 5, 0);
+	glRotatef(-180, 0, 1, 0);
+	glTranslatef(1, 1, 1);
+	dronek.dron_rysuje();
+	glPopMatrix();
 	glFlush();
-
 	glutSwapBuffers();
+
 }
+
 
 
 void initialize()
 {
-	glMatrixMode(GL_PROJECTION);												// select projection matrix
-	glViewport(0, 0, win.width, win.height);									// set the viewport
-	glMatrixMode(GL_PROJECTION);												// set matrix mode
-	glLoadIdentity();															// reset projection matrix
+	glMatrixMode(GL_PROJECTION);
+	glViewport(0, 0, win.width, win.height);
 	GLfloat aspect = (GLfloat)win.width / win.height;
-	gluPerspective(win.field_of_view_angle, aspect, win.z_near, win.z_far);		// set up a perspective projection matrix
-	
-	glMatrixMode(GL_MODELVIEW);	
-
-	// specify which matrix is the current matrix
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(win.field_of_view_angle, aspect, win.z_near, win.z_far);
+	glMatrixMode(GL_MODELVIEW);
 	glShadeModel(GL_SMOOTH);
-	glClearDepth(1.0f);														// specify the clear value for the depth buffer
+	glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
+	glClearDepth(1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);						// specify implementation-specific hints
-	glClearColor(1.0, 1.0, 1.0, 1.0);											// specify clear values for the color buffers								
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	GLfloat amb_light[] = { 0.1, 0.1, 0.1, 1.0 };
+	GLfloat diffuse[] = { 0.6, 0.6, 0.6, 1 };
+	GLfloat specular[] = { 0.7, 0.7, 0.3, 1 };
+
+	glEnable(GL_COLOR_MATERIAL);
+	glShadeModel(GL_SMOOTH);
+
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_DEPTH_TEST);
+											// specify clear values for the color buffers								
 }
 
 
-void keyboard(unsigned char key, int mousePositionX, int mousePositionY)
+void keyboard(int key, int x,int y)
 {
-	switch (key)
-	{
+	switch (key) {
 	case KEY_ESCAPE:
 		exit(0);
 		break;
-	case 97:
-		kat += GL_PI / 50;
+
+	case GLUT_KEY_F1:
+		if (dronek.goradol < 1)
+			dronek.goradol += 0.05;
 		break;
-	case 100:
-		kat -= GL_PI / 50;
+
+	case GLUT_KEY_F2:
+		if (dronek.goradol >= -3.8)
+			dronek.goradol -= 0.05;
 		break;
-	case 113:
-		KamerY += 5;
+
+	case GLUT_KEY_UP:
+	
+		if (collision)
+		{
+			systembat.speed == 0;
+		}
+		else
+		{
+			systembat.speed += 0.1;
+			dronek.nachyl -= 0.05;
+			if (systembat.speed > 0.5)systembat.speed = 0.5;
+		}
 		break;
-	case 101:
-		KamerY -= 5;
+	case GLUT_KEY_DOWN:
+		systembat.speed -= 0.1;
+		dronek.nachyl += 0.05;
+		if (systembat.speed < -0.5)systembat.speed = -0.5;
 		break;
-	case 119:
-		KamerX += sin(kat)*3;
-		KamerZ += cos(kat) * 3;
+
+	case GLUT_KEY_LEFT:
+		dronek.ster += 0.2;
+		systembat.katZ += dronek.ster;//kamera
+		systembat.katX -= dronek.ster;//dron
 		break;
-	case 115:
-		KamerX -= sin(kat) *3;
-		KamerZ -= cos(kat) * 3;
-		break;
+
+	case GLUT_KEY_RIGHT:
+
+		dronek.ster -= 0.2;
+		systembat.katZ += dronek.ster;//kamera
+		systembat.katX -= dronek.ster;//dron
+
 	default:
 		break;
 	}
@@ -112,9 +211,9 @@ int main(int argc, char **argv)
 	win.width = 1280;
 	win.height = 720;
 	win.title = "Projekt Grafika";
-	win.field_of_view_angle = 90;
+	win.field_of_view_angle = 45;
 	win.z_near = 10.0f;
-	win.z_far = 1000.0f;
+	win.z_far = 100000.0f;
 
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
@@ -123,8 +222,10 @@ int main(int argc, char **argv)
 	glutCreateWindow(win.title);								// create Window
 	glutDisplayFunc(display);									// register Display Function
 	glutIdleFunc(display);									// register Idle Function
-	glutKeyboardFunc(keyboard);								// register Keyboard Handler
+	//glutKeyboardFunc(keyboard);								// register Keyboard Handler
+	glutSpecialFunc(keyboard);
 	initialize();
+	glutTimerFunc(33, TimerFunction, 1);
 	glutMainLoop();												// run GLUT mainloop
 	return 0;
 }
