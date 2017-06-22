@@ -3,21 +3,14 @@
 #include <GL/gl.h>		   // Open Graphics Library (OpenGL) header
 #include <GL/glut.h>	   // The GL Utility Toolkit (GLUT) Header
 #include <math.h>
-#include "systemDron.h"
 #include "dron.h"
+#include "sterowanie.h"
 #include "glm.h"
 
 #define KEY_ESCAPE 27
 #define GL_PI 3.14
 
-GLfloat xRot = 0.0f;
-GLfloat yRot = 0.0f;
-GLdouble xCam, yCam, zCam, angle = 0;
-GLfloat rotatex = 90;
-GLfloat rotatey = 90;
-GLfloat rotate = 0;
-GLfloat translatex = 0;
-GLfloat translatey = 0;
+
 dron dronek;
 
 typedef struct {
@@ -32,66 +25,68 @@ typedef struct {
 
 float g_rotation;
 glutWindow win;
-SYSTEMB systembat;
-GLMmodel *bud;
+sterowanie ster;
+GLMmodel *stadion;
 
+//funkcja powodujaca zatrzymywanie sie drona i wracanie do normalnej pozycji
 void TimerFunction(int value) {
 	dronek.nachyl = dronek.nachyl*0.9;
 
 
-	systembat.speed = systembat.speed*0.98;
+	ster.szybkosc = ster.szybkosc*0.98;
 	dronek.naboki = dronek.naboki*0.9;
 	glutPostRedisplay();
 	glutTimerFunc(33, TimerFunction, 1);
 }
 
-void Budynek() {
-	if (!bud) {
-		bud = glmReadOBJ("nowy.obj");
-		if (!bud) exit(0);
-		glmFacetNormals(bud);
-		glmVertexNormals(bud, 90.0);
+//import z blendera
+void stad() {
+	if (!stadion) {
+		stadion = glmReadOBJ("nowy.obj");
+		if (!stadion) exit(0);
+		glmFacetNormals(stadion);
+		glmVertexNormals(stadion, 90.0);
 	}
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.003");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.002");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.001");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.012_Cylinder.014");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.013");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.012");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.011");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.010");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.009");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.008");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.011_Cylinder.013");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.010_Cylinder.012");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.009_Cylinder.011");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.008_Cylinder.010");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.007");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.006");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.005");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.004");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.003");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.002");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.001");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.007");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.006");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.005");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.004");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Plane.001_Plane.002");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.003");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.002");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.001");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube");
-	glmDraw(bud, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Plane");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.003");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.002");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus.001");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Torus");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.012_Cylinder.014");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.013");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.012");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.011");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.010");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.009");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.008");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.011_Cylinder.013");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.010_Cylinder.012");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.009_Cylinder.011");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.008_Cylinder.010");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.007");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.006");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.005");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.004");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.003");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.002");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder.001");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cylinder");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.007");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.006");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.005");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.004");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Plane.001_Plane.002");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.003");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.002");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube.001");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Cube");
+	glmDraw(stadion, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE, " Plane");
 	
 	glPushMatrix();
 	glPopMatrix();
 
 }
-
-bool collision = false;
+void collis();
+bool collision = false; //do kolizji, mozliwe ze do usuniecia
 void display()
 {
 
@@ -103,13 +98,13 @@ void display()
 	glEnable(GL_POLYGON_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA_SATURATE, GL_ONE);
 	glEnable(GL_COLOR_MATERIAL);
-	glTranslatef(translatex, translatey, -15);
-	glRotatef(-systembat.katY, 1.0, 0, 0);
-	glRotatef(-systembat.katZ, 0, 1, 0);
-	glTranslatef(-systembat.x+0.5, -systembat.y, -systembat.z+0.2);//camera pozycja
+	glTranslatef(0, 0, -15);
+	glRotatef(-ster.katY, 1.0, 0, 0);
+	glRotatef(-ster.katZ, 0, 1, 0);
+	glTranslatef(-ster.x+0.5, -ster.y, -ster.z+0.2);//camera pozycja
 	glTranslatef(0, dronek.wysokosc, 0);
-	Budynek();
-	systembat.latanie(dronek.naboki, dronek.nachyl, dronek.wysokosc, collision);
+	stad();
+	ster.Poruszanie(dronek.naboki, dronek.nachyl, dronek.wysokosc, collision);
 	glPushMatrix();
 	glScalef(0.02, 0.02, 0.02);
 	glTranslatef(0, -dronek.wysokosc * 5, 0);
@@ -119,6 +114,7 @@ void display()
 	glPopMatrix();
 	glFlush();
 	glutSwapBuffers();
+	
 
 }
 
@@ -159,51 +155,91 @@ void keyboard(int key, int x,int y)
 		exit(0);
 		break;
 
-	case GLUT_KEY_F1:
-		if (dronek.wysokosc < 1)
+	case GLUT_KEY_F9:
+		if (dronek.wysokosc < 2)
 			dronek.wysokosc += 0.05;
 		break;
 
-	case GLUT_KEY_F2:
-		if (dronek.wysokosc >= -3.8)
+	case GLUT_KEY_F8:
+		if (dronek.wysokosc >= -4.8)
 			dronek.wysokosc -= 0.05;
 		break;
 
 	case GLUT_KEY_UP:
-	
+		collis();
 		if (collision)
 		{
-			systembat.speed == 0;
+			ster.szybkosc == 0;
 		}
 		else
 		{
-			systembat.speed += 0.1;
+			ster.szybkosc += 0.1;
 			dronek.nachyl -= 0.05;
-			if (systembat.speed > 0.5)systembat.speed = 0.5;
+			if (ster.szybkosc > 0.5)ster.szybkosc = 0.5;
 		}
 		break;
 	case GLUT_KEY_DOWN:
-		systembat.speed -= 0.1;
+		ster.szybkosc -= 0.1;
 		dronek.nachyl += 0.05;
-		if (systembat.speed < -0.5)systembat.speed = -0.5;
+		if (ster.szybkosc < -0.5)ster.szybkosc = -0.5;
 		break;
 
 	case GLUT_KEY_LEFT:
 		dronek.naboki += 0.2;
-		systembat.katZ += dronek.naboki;//kamera
-		systembat.katX -= dronek.naboki;//dron
+		ster.katZ += dronek.naboki;//kamera
+		ster.katX -= dronek.naboki;//dron
 		break;
 
 	case GLUT_KEY_RIGHT:
 
 		dronek.naboki -= 0.2;
-		systembat.katZ += dronek.naboki;//kamera
-		systembat.katX -= dronek.naboki;//dron
+		ster.katZ += dronek.naboki;//kamera
+		ster.katX -= dronek.naboki;//dron
 
 	default:
 		break;
 	}
 }
+
+void collis()
+{
+	float odleglosc;
+
+	float PrzeszkodaX[15] = { -361.324, -361.324,-899.030, -899.030 , -362.131, -362.131, -362.131, -362.131, -362.131, -362.131, -362.131, -362.131, -362.131, -362.131, -362.131 };
+	float PrzeszkodaZ[15] = { -97.317, 78.098, 78.098, -97.317, 48.098, 18.098, -12.098, -42.098 , -72.098, 63.098, 33.098, 3.098, -27.098, -57.098, -87.098 };
+	float PrzeszkodaY[15] = { 0, 0, 0, 0 , -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2 };
+	for (int i = 0; i < 17; i++)
+	{
+		if (PrzeszkodaY[i] == 0)
+		{
+			odleglosc = sqrt((ster.x - PrzeszkodaX[i])*(ster.x - PrzeszkodaX[i]) + (ster.z - PrzeszkodaZ[i])*(ster.z - PrzeszkodaZ[i]));
+			if (odleglosc < 15)
+			{
+				collision = true;
+				break;
+			}
+			else
+			{
+				collision = false;
+			}
+		}
+		else
+		{
+			odleglosc = sqrt((ster.x - PrzeszkodaX[i])*(ster.x - PrzeszkodaX[i]) + (ster.z - PrzeszkodaZ[i])*(ster.z - PrzeszkodaZ[i]) + (dronek.wysokosc - PrzeszkodaY[i])*(dronek.wysokosc - PrzeszkodaY[i]));
+			if (odleglosc < 17)
+			{
+				collision = true;
+				break;
+			}
+			else
+			{
+				collision = false;
+			}
+			
+		}
+	}
+}
+
 
 int main(int argc, char **argv)
 {

@@ -160,8 +160,8 @@
     <ClCompile Include="Prostopadloscian.cpp" />
     <ClCompile Include="prostoTrojkat.cpp" />
     <ClCompile Include="smiglo.cpp" />
+    <ClCompile Include="sterowanie.cpp" />
     <ClCompile Include="stozek.cpp" />
-    <ClCompile Include="systemDron.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Tlow.cpp" />
     <ClCompile Include="trapez.cpp" />
@@ -179,8 +179,8 @@
     <ClInclude Include="Prostopadloscian.h" />
     <ClInclude Include="prostoTrojkat.h" />
     <ClInclude Include="smiglo.h" />
+    <ClInclude Include="sterowanie.h" />
     <ClInclude Include="stozek.h" />
-    <ClInclude Include="systemDron.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Tlow.h" />
     <ClInclude Include="trapez.h" />
